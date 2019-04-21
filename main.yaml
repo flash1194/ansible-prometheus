@@ -20,6 +20,10 @@
       git:
         repo: "{{ prom_cfgs_repo }}"
         dest: "{{ prom_cfgs_dir }}"
+      
+    - name: Sleeping for git Clone
+      pause:
+        seconds: 5
     
     - name: Prometheus | Create systemd file
       copy:
