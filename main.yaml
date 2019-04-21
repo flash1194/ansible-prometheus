@@ -7,7 +7,7 @@
     prometheus_download_url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
     prom_base_dir: "/srv/apps"
     prom_cfgs_repo: "https://github.com/flash1194/prometheus-configs.git"
-    prom_cfgs_dir: "/srv/cfgs"
+    prom_cfgs_dir: "/srv/cfgs/prometheus-configs"
 
   tasks:
     - name: Prometheus | Create appropriate base folder structure
@@ -21,10 +21,6 @@
         repo: "{{ prom_cfgs_repo }}"
         dest: "{{ prom_cfgs_dir }}"
       
-    - name: Sleeping for git Clone
-      pause:
-        seconds: 5
-    
     - name: Prometheus | Create systemd file
       copy:
         src: "{{ prom_cfgs_dir }}/prometheus-configs/prometheus.service"
