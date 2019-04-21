@@ -16,6 +16,10 @@
         state: directory
         mode: 0755
       
+    - name: Prometheus | Create service account
+      user:
+        name: prometheus
+
     - name: Prometheus | Clone configs
       git:
         repo: "{{ prom_cfgs_repo }}"
@@ -35,6 +39,22 @@
     
     - name: Prometheus | Rename directory for simplicity
       command: "mv {{ prom_base_dir }}/prometheus-{{ prometheus_version }}.linux-amd64 {{ prom_base_dir }}/prometheus"
+
+    - name: Prometheus | Make service account owner of Prometheus application directory
+      file:
+        path: "{{ prom_base_dir }}/prometheus"
+        owner: prometheus
+        group: prometheus
+        recurse: yes
+        mode: 0777
+    
+    - name: Prometheus | Make service account owner of Prometheus configurations directory
+      file:
+        path: "{{ prom_cfgs_dir }}"
+        owner: prometheus
+        group: prometheus
+        recurse: yes
+        mode: 0777
 
     - name: Prometheus | Start and enable Prometheus service
       systemd:
