@@ -15,6 +15,24 @@
         path: "{{ prom_base_dir }}"
         state: directory
         mode: 0755
+    
+    - name: Prometheus | Create folder structure for Prometheus storage
+      file:
+        path: "/var/lib/prometheus"
+        state: directory
+        mode: 0777
+    
+    - name: Prometheus | Create folder structure for Prometheus consoles
+      file:
+        path: "/etc/prometheus/consoles"
+        state: directory
+        mode: 0777
+    
+    - name: Prometheus | Create folder structure for Prometheus console libraries
+      file:
+        path: "/etc/prometheus/console_libraries"
+        state: directory
+        mode: 0777
       
     - name: Prometheus | Create service account
       user:
@@ -51,6 +69,22 @@
     - name: Prometheus | Make service account owner of Prometheus configurations directory
       file:
         path: "{{ prom_cfgs_dir }}"
+        owner: prometheus
+        group: prometheus
+        recurse: yes
+        mode: 0777
+
+    - name: Prometheus | Make service account owner of Prometheus storage directory
+      file:
+        path: "/var/lib/prometheus"
+        owner: prometheus
+        group: prometheus
+        recurse: yes
+        mode: 0777
+    
+    - name: Prometheus | Make service account owner of Prometheus console directory
+      file:
+        path: "/etc/prometheus"
         owner: prometheus
         group: prometheus
         recurse: yes
