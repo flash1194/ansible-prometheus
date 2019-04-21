@@ -22,7 +22,7 @@
         dest: "{{ prom_cfgs_dir }}"
     
     - name: Prometheus | Commands
-      command: "ls {{ prom_cfgs_dir }}"
+      command: "pwd"
       register: out
 
     - debug:
