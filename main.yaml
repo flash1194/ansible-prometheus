@@ -37,6 +37,8 @@
       command: "mv {{ prom_base_dir }}/prometheus-{{ prometheus_version }}.linux-amd64 {{ prom_base_dir }}/prometheus"
 
     - name: Prometheus | Start and enable Prometheus service
-      service:
+      systemd:
         name: prometheus
+        state: started
         enabled: yes
+        daemon_reload: yes
