@@ -20,13 +20,6 @@
       git:
         repo: "{{ prom_cfgs_repo }}"
         dest: "{{ prom_cfgs_dir }}"
-    
-    - name: Prometheus | Commands
-      command: "ls {{ prom_cfgs_dir }}"
-      register: out
-
-    - debug:
-        msg: "{{ out.stdout }}"
 
     - name: Prometheus | Create systemd file
       copy:
