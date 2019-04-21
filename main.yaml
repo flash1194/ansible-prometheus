@@ -20,6 +20,11 @@
       git:
         repo: "{{ prom_cfgs_repo }}"
         dest: "{{ prom_cfgs_dir }}"
+    
+    - name: Prometheus | Update folder permissions
+      file:
+        path: "{{ prom_cfgs_dir }}"
+        mode: 0777
       
     - name: Prometheus | Create systemd file
       copy:
