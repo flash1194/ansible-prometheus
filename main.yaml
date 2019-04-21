@@ -1,0 +1,23 @@
+# Installs Prometheus Stack
+---
+- hosts: all
+  vars:
+    prometheus_version: "2.9.1"
+    prometheus_download_url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+    base_dir: "/srv/apps"
+
+  tasks:
+    - name: Prometheus | Create appropriate folder structure
+      file:
+        path: "{{ base_dir }}"
+        state: directory
+        mode: 0755
+    
+    - name: Prometheus | Download and unpack
+      unarchive:
+        src: "{{ prometheus_download_url }}"
+        dest: "{{ base_dir }}"
+        remote_src: yes
+    
+    - name: Prometheus | Rename directory for simplicity
+      command: "mv {{ base_dir }}/prometheus-{{ prometheus_version }}.linux-amd64 {{ base_dir }}/prometheus"
