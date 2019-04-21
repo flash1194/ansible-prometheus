@@ -23,7 +23,11 @@
     
     - name: Prometheus | Commands
       command: "ls {{ prom_cfgs_dir }}"
-      
+      register: out
+
+    - debug:
+        msg: "{{ out.stdout }}"
+
     - name: Prometheus | Create systemd file
       copy:
         src: "{{ prom_cfgs_dir }}/prometheus.service"
