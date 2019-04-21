@@ -23,7 +23,7 @@
       
     - name: Prometheus | Create systemd file
       copy:
-        src: "{{ prom_cfgs_dir }}/prometheus-configs/prometheus.service"
+        src: "{{ prom_cfgs_dir }}/prometheus.service"
         dest: "/etc/systemd/system/"
         
     - name: Prometheus | Download and unpack
