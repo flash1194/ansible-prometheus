@@ -5,20 +5,37 @@
   vars:
     prometheus_version: "2.9.1"
     prometheus_download_url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
-    base_dir: "/srv/apps"
+    prom_base_dir: "/srv/apps"
+    prom_cfgs_repo: "https://github.com/flash1194/prometheus-configs.git"
+    prom_cfgs_dir: "/srv/cfgs"
 
   tasks:
-    - name: Prometheus | Create appropriate folder structure
+    - name: Prometheus | Create appropriate base folder structure
       file:
-        path: "{{ base_dir }}"
+        path: "{{ prom_base_dir }}"
         state: directory
         mode: 0755
+      
+    - name: Prometheus | Clone configs
+      git:
+        repo: "{{ prom_cfgs_repo }}"
+        dest: "{{ prom_cfgs_dir }}"
     
+    - name: Prometheus | Create systemd file
+      copy:
+        src: "{{ prom_cfgs_dir }}/prometheus.service"
+        dest: "/etc/systemd/system/"
+        
     - name: Prometheus | Download and unpack
       unarchive:
         src: "{{ prometheus_download_url }}"
-        dest: "{{ base_dir }}"
+        dest: "{{ prom_base_dir }}"
         remote_src: yes
     
     - name: Prometheus | Rename directory for simplicity
-      command: "mv {{ base_dir }}/prometheus-{{ prometheus_version }}.linux-amd64 {{ base_dir }}/prometheus"
+      command: "mv {{ prom_base_dir }}/prometheus-{{ prometheus_version }}.linux-amd64 {{ prom_base_dir }}/prometheus"
+
+    - name: Prometheus | Start and enable Prometheus service
+      service:
+        name: prometheus
+        enabled: yes
